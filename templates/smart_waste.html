@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart System for Waste Sorting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10b981',
+                        secondary: '#059669',
+                        accent: '#34d399',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-gradient {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #4facfe, #00f2fe, #43e97b, #38f9d7);
+            background-size: 400% 400%;
+            animation: gradient 20s ease infinite;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(252, 70, 107, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(99, 102, 241, 0.3) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+    <script>
+        // Carousel functionality
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            
+            slides.forEach((slide, i) => {
+                slide.style.display = i === index ? 'block' : 'none';
+            });
+            
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('bg-white');
+                    dot.classList.remove('bg-gray-400');
+                } else {
+                    dot.classList.add('bg-gray-400');
+                    dot.classList.remove('bg-white');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % 5;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + 5) % 5;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+
+        // Auto-advance carousel every 5 seconds
+        setInterval(nextSlide, 5000);
+    </script>
+</head>
+<body class="animated-gradient min-h-screen">
+    <!-- Header Section -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" class="h-16 w-16 rounded-full object-cover shadow-md">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Smart Waste Sorting</h1>
+                        <p class="text-sm text-gray-600 hidden md:block">AI-Powered Waste Management</p>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <a href="{{ url_for('login') }}" class="px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-all duration-300 shadow-md hover:shadow-lg font-medium">Login</a>
+                    <a href="{{ url_for('register') }}" class="px-6 py-2.5 bg-white text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all duration-300 shadow-md hover:shadow-lg font-medium">Register</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="container mx-auto px-4 py-12">
+        <div class="bg-gradient-to-r from-primary to-secondary rounded-2xl shadow-2xl p-8 md:p-12 text-white">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4">Create a Sustainable Future</h2>
+            <p class="text-lg md:text-xl opacity-90 max-w-3xl">Learn about waste categories and proper disposal methods to protect our environment and build a greener tomorrow.</p>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-10">
+            <p class="text-gray-700 text-lg leading-relaxed mb-6">
+                Waste refers to any material that is discarded because it no longer serves a useful purpose. It comes in various forms, including solid, 
+                liquid, or gas, and can be generated from households, industries, agriculture, and even natural processes. Proper waste management is 
+                essential for maintaining a clean, healthy, and sustainable environment.
+            </p>
+            <p class="text-gray-700 text-lg leading-relaxed font-semibold">
+                There are several types of waste, each requiring different methods of disposal and recycling:
+            </p>
+        </div>
+    </section>
+
+    <!-- Waste Types Information Carousel -->
+    <section class="container mx-auto px-4 py-12">
+        <div class="text-center mb-8">
+            <h2 class="text-4xl font-bold text-white mb-3">Understanding Waste Types</h2>
+            <p class="text-white text-lg opacity-90">Learn about different waste categories and proper disposal methods</p>
+        </div>
+
+        <div class="relative max-w-5xl mx-auto">
+            <!-- Carousel Container -->
+            <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                <!-- Slide 1: Recyclable Waste -->
+                <div class="carousel-slide" style="display: block;">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-8 text-center">
+                        <div class="flex justify-center mb-4">
+                            <img src="{{ url_for('static', filename='images/recyclable.png') }}" alt="Recyclable" class="h-32 w-32 object-contain bg-white rounded-full p-4 shadow-lg">
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-2">Recyclable Waste</h3>
+                        <p class="text-white text-lg opacity-90">Materials that can be reprocessed and reused to create new products</p>
+                    </div>
+                    <div class="p-8">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                    <span class="text-2xl">📋</span> Examples
+                                </h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-blue-500">•</span> Paper & Cardboard</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-blue-500">•</span> Plastic Bottles</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-blue-500">•</span> Glass Containers</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-blue-500">•</span> Metal Cans</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-blue-500">•</span> Newspapers</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                    <span class="text-2xl">✨</span> Benefits
+                                </h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Conserves natural resources</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Reduces energy consumption</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Minimizes pollution</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Creates jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                <span class="text-xl">🗑️</span> How to Dispose
+                            </h4>
+                            <p class="text-gray-700">Clean and separate recyclables. Place in blue recycling bins.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2: Compostable Waste -->
+                <div class="carousel-slide" style="display: none;">
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 p-8 text-center">
+                        <div class="flex justify-center mb-4">
+                            <img src="{{ url_for('static', filename='images/compostable.png') }}" alt="Compostable" class="h-32 w-32 object-contain bg-white rounded-full p-4 shadow-lg">
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-2">Compostable Waste</h3>
+                        <p class="text-white text-lg opacity-90">Organic materials that decompose naturally and enrich soil</p>
+                    </div>
+                    <div class="p-8">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                    <span class="text-2xl">📋</span> Examples
+                                </h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">•</span> Food Scraps</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">•</span> Yard Trimmings</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">•</span> Coffee Grounds</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">•</span> Eggshells</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">•</span> Leaves</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                    <span class="text-2xl">✨</span> Benefits
+                                </h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Enriches soil quality</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Reduces landfill waste</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Lowers methane emissions</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Natural fertilizer</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                            <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                <span class="text-xl">🗑️</span> How to Dispose
+                            </h4>
+                            <p class="text-gray-700">Add to compost bin or green waste collection. Keep separate from other waste.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Non-Recyclable Waste -->
+                <div class="carousel-slide" style="display: none;">
+                    <div class="bg-gradient-to-r from-red-500 to-red-600 p-8 text-center">
+                        <div class="flex justify-center mb-4">
+                            <img src="{{ url_for('static', filename='images/non-recyclable.png') }}" alt="Non-Recyclable" class="h-32 w-32 object-contain bg-white rounded-full p-4 shadow-lg">
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-2">Non-Recyclable Waste</h3>
+                        <p class="text-white text-lg opacity-90">Items that cannot be recycled due to composition or contamination</p>
+                    </div>
+                    <div class="p-8">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                    <span class="text-2xl">📋</span> Examples
+                                </h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-red-500">•</span> Styrofoam</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-red-500">•</span> Plastic Bags</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-red-500">•</span> Diapers</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-red-500">•</span> Ceramics</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-red-500">•</span> Contaminated Items</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                    <span class="text-2xl">✨</span> Benefits
+                                </h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Prevents contamination</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Protects recycling streams</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Reduces environmental harm</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
+                            <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                <span class="text-xl">🗑️</span> How to Dispose
+                            </h4>
+                            <p class="text-gray-700">Place in general waste bin. Consider reducing usage of these items.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4: Dry Waste -->
+                <div class="carousel-slide" style="display: none;">
+                    <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 p-8 text-center">
+                        <div class="flex justify-center mb-4">
+                            <img src="{{ url_for('static', filename='images/dry.png') }}" alt="Dry" class="h-32 w-32 object-contain bg-white rounded-full p-4 shadow-lg">
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-2">Dry Waste</h3>
+                        <p class="text-white text-lg opacity-90">Non-biodegradable materials without moisture content</p>
+                    </div>
+                    <div class="p-8">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                    <span class="text-2xl">📋</span> Examples
+                                </h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-yellow-500">•</span> Plastic Items</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-yellow-500">•</span> Metal Objects</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-yellow-500">•</span> Glass</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-yellow-500">•</span> Rubber</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-yellow-500">•</span> Leather</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                    <span class="text-2xl">✨</span> Benefits
+                                </h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Easier to handle and transport</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Often recyclable</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Can be sorted efficiently</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+                            <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                <span class="text-xl">🗑️</span> How to Dispose
+                            </h4>
+                            <p class="text-gray-700">Separate from wet waste. Many dry waste items can be recycled.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 5: Wet Waste -->
+                <div class="carousel-slide" style="display: none;">
+                    <div class="bg-gradient-to-r from-teal-500 to-teal-600 p-8 text-center">
+                        <div class="flex justify-center mb-4">
+                            <img src="{{ url_for('static', filename='images/wet.png') }}" alt="Wet" class="h-32 w-32 object-contain bg-white rounded-full p-4 shadow-lg">
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-2">Wet Waste</h3>
+                        <p class="text-white text-lg opacity-90">Biodegradable organic waste with high moisture content</p>
+                    </div>
+                    <div class="p-8">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                    <span class="text-2xl">📋</span> Examples
+                                </h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-teal-500">•</span> Kitchen Waste</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-teal-500">•</span> Vegetable Peels</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-teal-500">•</span> Fruit Waste</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-teal-500">•</span> Cooked Food</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-teal-500">•</span> Spoiled Food</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                    <span class="text-2xl">✨</span> Benefits
+                                </h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Can be composted</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Decomposes quickly</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Produces biogas</li>
+                                    <li class="flex items-center gap-2 text-gray-700"><span class="text-green-500">✓</span> Creates organic fertilizer</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-teal-50 rounded-lg border-l-4 border-teal-500">
+                            <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                <span class="text-xl">🗑️</span> How to Dispose
+                            </h4>
+                            <p class="text-gray-700">Use separate wet waste bin. Ideal for composting or biogas production.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Arrows -->
+                <button onclick="prevSlide()" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 z-10">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button onclick="nextSlide()" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 z-10">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Carousel Dots -->
+            <div class="flex justify-center gap-3 mt-6">
+                <button onclick="goToSlide(0)" class="carousel-dot w-3 h-3 rounded-full bg-white transition-all duration-300 hover:scale-125"></button>
+                <button onclick="goToSlide(1)" class="carousel-dot w-3 h-3 rounded-full bg-gray-400 transition-all duration-300 hover:scale-125"></button>
+                <button onclick="goToSlide(2)" class="carousel-dot w-3 h-3 rounded-full bg-gray-400 transition-all duration-300 hover:scale-125"></button>
+                <button onclick="goToSlide(3)" class="carousel-dot w-3 h-3 rounded-full bg-gray-400 transition-all duration-300 hover:scale-125"></button>
+                <button onclick="goToSlide(4)" class="carousel-dot w-3 h-3 rounded-full bg-gray-400 transition-all duration-300 hover:scale-125"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <section class="container mx-auto px-4 py-12">
+        <div class="bg-gradient-to-r from-primary to-secondary rounded-2xl shadow-2xl p-8 md:p-10 text-white">
+            <p class="text-lg leading-relaxed text-center">
+                By understanding the different types of waste and how to dispose of them correctly, we can reduce pollution, conserve resources, and contribute to 
+                a healthier planet. The Smart Waste Sorting System helps simplify this process by using AI to automatically classify waste, ensuring more accurate 
+                sorting and better environmental outcomes.
+            </p>
+        </div>
+    </section>
+
+    <!-- Bottom Spacing -->
+    <div class="pb-12"></div>
+</body>
+</html>

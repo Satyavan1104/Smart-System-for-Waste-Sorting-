@@ -1,0 +1,403 @@
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('../images/background.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}
+
+.header-container {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: rgba(251, 251, 251, 0.788);
+    border-radius: 8px;
+}
+
+.header-container .logo {
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    position: absolute;
+    top: 10px; /* Adjust the top spacing */
+    left: 150px; 
+}
+
+.header-container h1 {
+    font-size: 2.5em;
+    color:#00050a ;
+    margin: 10px 0;
+}
+
+.header-container p {
+    font-size: 1.2em;
+    color: #01080f;
+    margin: 0 0 20px 0;
+}
+
+.container {
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left;
+    flex-direction: column;
+}
+
+
+header {
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: left;
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 95%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.button-container {
+    position: absolute; /* Position relative to the page */
+    top: 20px; /* Distance from the top */
+    right: 20px; /* Distance from the right */
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: rgb(8, 8, 8);
+    background-color: #aeafaf;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    margin-left: 10px; /* Add space between buttons */
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+
+
+
+/* Styles for buttons */
+button {
+    width: 47%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+p {
+    color: #090000;
+    font-size: 1em;
+}
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    gap:10px;
+}
+
+.button-row button {
+    background-color: #0056b3; /* Red */
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.register-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.register-button-container p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+}
+.register-button {
+    background-color: #0056b3; /* Red */
+    border: none;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.register-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+.success {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+section img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 8px;
+}
+
+.categories-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping to the next row */
+    gap: 20px;       /* Add spacing between boxes */
+    justify-content: center; /* Center the items in the container */
+    padding: 20px;
+  }
+
+  /* Each category box */
+  .category {
+    flex: 1 1 calc(20% - 20px); /* Each takes 20% of the row with gap adjustment */
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  /* Hover effects */
+  .category:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Category icons/images */
+  .category img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 15px;
+  }
+
+  /* Category headings */
+  .category h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  /* Category descriptions */
+  .category p {
+    font-size: 1em;
+    color: #555;
+    text-align: justify;
+  }
+
+  /* Responsive design for smaller screens */
+  @media (max-width: 768px) {
+    .category {
+      flex: 1 1 calc(50% - 20px); /* Two per row */
+    }
+  }
+
+  @media (max-width: 480px) {
+    .category {
+      flex: 1 1 100%; /* Full width for small screens */
+    }
+  }
+
+  .uploaded-image {
+    display: flex;
+    flex-direction: column;     /* Align items vertically */
+    align-items: center;        /* Center the image horizontally */
+    text-align: left;           /* Align the text to the left */
+    margin-top: 20px;           /* Adds space above the image */
+}
+
+.uploaded-image h2 {
+    align-self: flex-start;     /* Aligns the heading to the left */
+    margin-bottom: 10px;        /* Optional: space between heading and image */
+}
+
+.uploaded-image img {
+    max-width: 300px;           /* Maximum width of 300px */
+    max-height: 300px;          /* Maximum height of 300px */
+    object-fit: contain;        /* Ensures the image scales correctly without distorting */
+}
+
+.dashboard,
+.map-container,
+.waste-data {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.dashboard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+.dashboard-item {
+    background-color: #f4f8ff;
+    border: 1px solid #dbe2ef;
+    border-radius: 10px;
+    padding: 20px;
+    width: 30%;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+table th {
+    background-color: #f4f4f9;
+    font-weight: bold;
+}
+
+#map {
+    height: 400px;
+    border-radius: 10px;
+}
+
+.action-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.action-button:hover {
+    background-color: #45a049;
+}
+
+.waste-status {
+    padding: 8px;
+    font-size: 14px;
+    width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+/* Add a hover effect for the dropdown */
+.waste-status:hover {
+    border-color: #888;
+}
+
+/* Green color for "Yes" */
+.waste-status[value="yes"] {
+    background-color: green;
+    color: white;
+}
+
+/* Red color for "No" */
+.waste-status[value="no"] {
+    background-color: red;
+    color: white;
+}
+
+#history-list {
+    margin-top: 20px;
+}
+
+.history-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.history-item img {
+    max-width: 100px;
+    margin-bottom: 10px;
+}
+
+.history-item p {
+    font-size: 14px;
+    color: #555;
+}

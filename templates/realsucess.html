@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Processing</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <img src="images/logo.jpg" alt="Logo" class="logo">
+            <h1>Smart System for Waste Sorting</h1>
+            <p>Learn about waste categories and proper disposal methods to create a sustainable future.</p>
+            <div class="button-container">
+                <a href="/" class="button">Home</a>
+            </div>
+        </div>
+        <header>
+            <h2>Real-Time Processing Started!</h2>
+            <h4>categories and disposal methods:</h4>
+        </header>
+        <ul>
+            <li><strong>Recyclable:</strong> Items that can be processed and reused, like plastics, glass, and metals.</li>
+            <li><strong>Compostable:</strong> Organic waste such as food scraps and yard waste.</li>
+            <li><strong>Non-recyclable:</strong> Items that cannot be recycled, like certain plastics and mixed materials.</li>
+            <li><strong>Dry waste:</strong> Waste that doesn't get wet and is usually non-recyclable, like packaging and textiles.</li>
+            <li><strong>Wet waste:</strong> Waste that is biodegradable and can be composted or processed, like food waste.</li>
+        </ul>
+
+        <form action="/stop_processing" method="POST">
+            <div class="button-row">
+                <button type="submit">Stop Real-Time Processing</button>
+            </div>
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('detect_waste') }}">
+            <div class="button-row">
+                <button type="submit">Back</button>
+            </div>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Smart Waste Sorting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10b981',
+                        secondary: '#059669',
+                        accent: '#34d399',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <style>
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-gradient {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #4facfe, #00f2fe, #43e97b, #38f9d7);
+            background-size: 400% 400%;
+            animation: gradient 20s ease infinite;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(252, 70, 107, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(99, 102, 241, 0.3) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        #map { 
+            height: 500px; 
+        }
+    </style>
+</head>
+<body class="animated-gradient min-h-screen">
+    <!-- Header Section -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" class="h-16 w-16 rounded-full object-cover shadow-md">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+                        <p class="text-sm text-gray-600 hidden md:block">Manage Waste Locations</p>
+                    </div>
+                </div>
+                <a href="/" class="px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-all duration-300 shadow-md hover:shadow-lg font-medium">Home</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Locations Table Card -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+            <div class="bg-gradient-to-r from-primary to-secondary p-6">
+                <h2 class="text-2xl font-bold text-white">Stored Locations</h2>
+                <p class="text-white opacity-90 mt-1">Manage reported waste locations</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-100 border-b-2 border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Location Name</th>
+                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Latitude</th>
+                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Longitude</th>
+                            <th class="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Submitted By</th>
+                            <th class="px-6 py-4 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">Completed</th>
+                            <th class="px-6 py-4 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for location in locations %}
+                            <tr class="hover:bg-gray-50 transition-colors duration-200">
+                                <td class="px-6 py-4 text-gray-800 font-medium">{{ location.location_name }}</td>
+                                <td class="px-6 py-4 text-gray-600">{{ location.latitude }}</td>
+                                <td class="px-6 py-4 text-gray-600">{{ location.longitude }}</td>
+                                <td class="px-6 py-4 text-gray-800 font-medium">{{ location.username }}</td>
+                                <td class="px-6 py-4 text-center">
+                                    <input 
+                                        type="checkbox" 
+                                        class="completion-checkbox w-5 h-5 text-primary border-2 border-gray-300 rounded focus:ring-2 focus:ring-primary cursor-pointer" 
+                                        data-id="{{ location.id }}" 
+                                        {% if location.is_completed %}checked{% endif %}
+                                    >
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <form action="{{ url_for('delete_location', location_id=location.id) }}" method="POST" class="inline">
+                                        <button 
+                                            type="submit" 
+                                            onclick="return confirm('Are you sure you want to delete this location?')"
+                                            class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg font-semibold text-sm"
+                                        >
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Map Card -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6">
+                <h2 class="text-2xl font-bold text-white">Location Map</h2>
+                <p class="text-white opacity-90 mt-1">Visual representation of waste locations</p>
+            </div>
+            <div class="p-4">
+                <div id="map" class="h-[500px] rounded-lg shadow-inner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Spacing -->
+    <div class="pb-12"></div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script>
+        // Initialize the map (centered at some default location)
+        var map = L.map('map').setView([20.5937, 78.9629], 5);  // Default to India
+
+        // Set up the tile layer for OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Locations data passed from Flask (the locations list)
+        var locations = {{ locations | tojson | safe }};
+        console.log(locations);  // Debug to see the data in the browser's console
+        let markers = {}; // Object to store markers by location ID
+
+        // Function to create a marker icon
+        function createIcon(color) {
+            return L.icon({
+                iconUrl: `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+            });
+        }
+
+
+        // Add markers for each location
+        locations.forEach(function (location) {
+            const markerColor = location.is_completed ? "green" : "red";
+
+            const marker = L.marker([location.latitude, location.longitude], {
+                icon: createIcon(markerColor),
+            }).addTo(map);
+
+            marker.bindPopup(location.location_name); // Show location name on marker click
+            markers[location.id] = marker; // Store the marker in the markers object
+        });
+
+        // Handle checkbox changes
+        document.querySelectorAll('.completion-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const locationId = this.getAttribute('data-id');
+                const isChecked = this.checked;
+
+        // Send AJAX request to update the status
+                fetch(`/update_completion/${locationId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ is_completed: isChecked })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                    // Update marker color on the map
+                        const marker = markers[locationId];
+                        if (marker) {
+                            const newColor = isChecked ? "green" : "red";
+                            marker.setIcon(createIcon(newColor)); // Update marker icon
+                        }
+                    } else {
+                        alert('Failed to update status.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+</body>
+</html>
